@@ -1,0 +1,106 @@
+sku,item,qty_on_hand,unit_cost
+SKU001,Margherita Pizza,35,3.50
+SKU002,Caesar Salad,28,2.80
+SKU003,Pad Thai,42,3.75
+SKU004,Pasta Alfredo,25,3.25
+SKU005,Veg Biryani,48,2.50
+SKU006,Chicken Wings,52,2.15
+SKU007,Cheeseburger,18,3.50
+SKU008,Sushi Rolls,22,5.99
+SKU009,Fries,65,1.25
+SKU1004,Pasta Alfredo,36,3.4
+SKU1005,Caesar Salad,158,9.03
+SKU1006,Chicken Wings,153,8.35
+SKU1007,Cheeseburger,182,5.54
+SKU1008,Pad Thai,80,6.04
+SKU1009,Sushi Roll,130,4.39
+SKU1010,Ramen Bowl,104,4.94
+SKU1011,Chicken Wings,28,5.59
+SKU1012,Ramen Bowl,195,4.01
+SKU1013,Cheeseburger,38,2.26
+SKU1014,Chicken Wings,18,7.66
+SKU1015,Cheeseburger,94,8.05
+SKU1016,Margherita Pizza,91,4.65
+SKU1017,Tandoori Chicken,146,9.08
+SKU1018,Ramen Bowl,107,3.47
+SKU1019,Pasta Alfredo,153,9.27
+SKU1020,Sushi Roll,183,7.66
+SKU1021,Sushi Roll,50,3.73
+SKU1022,Chicken Wings,61,3.41
+SKU1023,Pad Thai,43,7.62
+SKU1024,Chicken Wings,53,3.29
+SKU1025,Cheeseburger,31,8.54
+SKU1026,Tandoori Chicken,149,6.54
+SKU1027,Chicken Wings,17,4.43
+SKU1028,Chicken Wings,21,6.44
+SKU1029,Tandoori Chicken,77,3.86
+SKU1030,Chicken Wings,124,6.93
+SKU1031,Caesar Salad,21,4.07
+SKU1032,Chicken Wings,55,1.67
+SKU1033,Pasta Alfredo,49,1.36
+SKU1034,Caesar Salad,124,6.15
+SKU1035,Pad Thai,10,9.0
+SKU1036,Margherita Pizza,173,2.55
+SKU1037,Pasta Alfredo,20,4.76
+SKU1038,Tandoori Chicken,21,8.64
+SKU1039,Pasta Alfredo,141,9.44
+SKU1040,Caesar Salad,19,8.59
+SKU1041,Veg Biryani,182,1.8
+SKU1042,Pad Thai,93,1.24
+SKU1043,Tandoori Chicken,107,6.76
+SKU1044,Caesar Salad,175,2.13
+SKU1045,Caesar Salad,191,7.3
+SKU1046,Cheeseburger,110,5.12
+SKU1047,Pasta Alfredo,53,4.76
+SKU1048,Veg Biryani,152,7.53
+SKU1049,Pad Thai,61,6.43
+SKU1050,Pasta Alfredo,175,6.05
+SKU1051,Margherita Pizza,25,5.44
+SKU1052,Cheeseburger,12,4.51
+SKU1053,Ramen Bowl,72,4.02
+SKU1054,Caesar Salad,66,4.91
+SKU1055,Cheeseburger,153,7.37
+SKU1056,Margherita Pizza,162,6.72
+SKU1057,Tandoori Chicken,74,1.97
+SKU1058,Pad Thai,159,6.64
+SKU1059,Caesar Salad,75,7.46
+SKU1060,Cheeseburger,10,8.06
+SKU1061,Margherita Pizza,99,2.9
+SKU1062,Caesar Salad,25,3.77
+SKU1063,Veg Biryani,28,2.94
+SKU1064,Veg Biryani,24,8.0
+SKU1065,Sushi Roll,128,6.44
+SKU1066,Pasta Alfredo,150,4.26
+SKU1067,Cheeseburger,88,4.58
+SKU1068,Caesar Salad,49,2.19
+SKU1069,Pad Thai,138,8.55
+SKU1070,Chicken Wings,103,4.79
+SKU1071,Veg Biryani,143,8.01
+SKU1072,Veg Biryani,19,5.35
+SKU1073,Caesar Salad,35,5.66
+SKU1074,Ramen Bowl,77,7.39
+SKU1075,Tandoori Chicken,76,6.03
+SKU1076,Tandoori Chicken,81,9.61
+SKU1077,Cheeseburger,26,7.39
+SKU1078,Margherita Pizza,180,9.3
+SKU1079,Caesar Salad,52,8.54
+SKU1080,Cheeseburger,178,6.1
+SKU1081,Veg Biryani,142,3.32
+SKU1082,Ramen Bowl,43,9.05
+SKU1083,Sushi Roll,14,8.4
+SKU1084,Chicken Wings,59,2.37
+SKU1085,Pad Thai,148,4.96
+SKU1086,Veg Biryani,152,7.56
+SKU1087,Sushi Roll,21,2.18
+SKU1088,Cheeseburger,79,2.07
+SKU1089,Sushi Roll,161,5.04
+SKU1090,Pasta Alfredo,96,7.48
+SKU1091,Pasta Alfredo,36,9.18
+SKU1092,Sushi Roll,10,7.29
+SKU1093,Margherita Pizza,189,7.96
+SKU1094,Veg Biryani,18,3.41
+SKU1095,Tandoori Chicken,139,5.91
+SKU1096,Veg Biryani,28,9.32
+SKU1097,Pad Thai,118,9.33
+SKU1098,Margherita Pizza,196,2.71
+SKU1099,Caesar Salad,90,4.58

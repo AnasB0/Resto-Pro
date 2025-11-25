@@ -1,0 +1,126 @@
+item,qty,price,date
+Margherita Pizza,5,9.99,2025-11-20
+Caesar Salad,3,7.99,2025-11-20
+Pad Thai,4,11.99,2025-11-19
+Pasta Alfredo,2,10.99,2025-11-19
+Veg Biryani,6,8.99,2025-11-18
+Chicken Wings,8,7.49,2025-11-18
+Cheeseburger,3,9.49,2025-11-17
+Sushi Rolls,7,13.99,2025-11-17
+Fries,5,3.99,2025-11-16
+Margherita Pizza,6,9.99,2025-11-16
+Caesar Salad,4,7.99,2025-11-15
+Pad Thai,5,11.99,2025-11-15
+Pasta Alfredo,3,10.99,2025-11-14
+Veg Biryani,4,8.99,2025-11-14
+Chicken Wings,9,7.49,2025-11-13
+Cheeseburger,4,9.49,2025-11-13
+Sushi Rolls,6,13.99,2025-11-12
+Fries,6,3.99,2025-11-12
+Margherita Pizza,7,9.99,2025-11-11
+Caesar Salad,5,7.99,2025-11-11
+Pad Thai,5,11.99,2025-11-10
+Pasta Alfredo,4,10.99,2025-11-10
+Veg Biryani,5,8.99,2025-11-09
+Chicken Wings,7,7.49,2025-11-09
+Sushi Rolls,5,13.99,2025-11-08
+Cheeseburger,5,9.49,2025-11-08
+Fries,7,3.99,2025-11-07
+Margherita Pizza,8,9.99,2025-11-07
+Caesar Salad,4,7.99,2025-11-06
+Tandoori Chicken,4,15.2,2025-11-02
+Chicken Wings,5,17.18,2025-10-28
+Veg Biryani,2,16.22,2025-11-15
+Tandoori Chicken,4,17.27,2025-10-26
+Veg Biryani,4,16.59,2025-11-05
+Chicken Wings,2,16.95,2025-11-13
+Pad Thai,5,6.01,2025-11-10
+Pad Thai,4,13.76,2025-11-13
+Cheeseburger,1,8.16,2025-11-21
+Veg Biryani,1,13.45,2025-11-01
+Ramen Bowl,1,24.47,2025-11-20
+Caesar Salad,1,17.69,2025-10-28
+Margherita Pizza,4,6.85,2025-11-06
+Ramen Bowl,3,9.64,2025-11-13
+Caesar Salad,5,24.49,2025-11-03
+Veg Biryani,5,12.7,2025-11-20
+Margherita Pizza,3,23.79,2025-11-23
+Cheeseburger,5,18.15,2025-11-17
+Pad Thai,1,19.17,2025-11-16
+Sushi Roll,5,14.79,2025-11-12
+Pasta Alfredo,2,16.65,2025-11-21
+Tandoori Chicken,3,10.48,2025-11-02
+Caesar Salad,4,11.04,2025-11-18
+Ramen Bowl,4,14.98,2025-11-04
+Sushi Roll,3,11.91,2025-10-31
+Sushi Roll,1,16.05,2025-11-10
+Veg Biryani,5,12.79,2025-11-20
+Caesar Salad,2,22.49,2025-10-28
+Chicken Wings,5,20.64,2025-10-31
+Cheeseburger,1,6.9,2025-11-03
+Caesar Salad,3,12.57,2025-11-11
+Cheeseburger,2,18.97,2025-11-09
+Tandoori Chicken,5,9.12,2025-11-04
+Veg Biryani,1,8.86,2025-11-15
+Pad Thai,4,8.92,2025-11-22
+Caesar Salad,1,18.13,2025-11-05
+Ramen Bowl,4,8.97,2025-11-12
+Tandoori Chicken,4,20.33,2025-11-13
+Caesar Salad,3,13.67,2025-11-07
+Pasta Alfredo,1,18.8,2025-11-08
+Tandoori Chicken,4,12.6,2025-11-19
+Tandoori Chicken,1,12.87,2025-11-15
+Ramen Bowl,1,6.36,2025-11-16
+Tandoori Chicken,1,12.17,2025-11-02
+Caesar Salad,4,15.64,2025-11-09
+Tandoori Chicken,2,13.64,2025-11-06
+Cheeseburger,4,6.51,2025-11-06
+Sushi Roll,3,23.81,2025-11-20
+Caesar Salad,4,5.32,2025-11-01
+Pasta Alfredo,1,20.16,2025-10-30
+Sushi Roll,5,16.59,2025-11-06
+Chicken Wings,5,13.16,2025-10-31
+Ramen Bowl,5,13.87,2025-11-06
+Caesar Salad,2,9.1,2025-11-11
+Pad Thai,2,14.31,2025-11-11
+Pad Thai,5,6.05,2025-10-31
+Pasta Alfredo,5,21.51,2025-11-23
+Veg Biryani,4,19.28,2025-11-05
+Sushi Roll,2,15.66,2025-11-19
+Cheeseburger,4,8.75,2025-11-22
+Pad Thai,5,8.59,2025-11-11
+Tandoori Chicken,4,21.7,2025-10-28
+Margherita Pizza,5,5.82,2025-10-30
+Chicken Wings,1,7.57,2025-10-26
+Tandoori Chicken,2,24.12,2025-11-14
+Cheeseburger,4,13.53,2025-11-22
+Pad Thai,4,20.78,2025-11-13
+Ramen Bowl,1,20.17,2025-11-02
+Margherita Pizza,5,22.14,2025-11-06
+Margherita Pizza,2,12.59,2025-10-28
+Margherita Pizza,1,5.11,2025-11-11
+Cheeseburger,5,12.03,2025-11-22
+Pad Thai,2,21.87,2025-11-12
+Cheeseburger,2,10.56,2025-11-23
+Caesar Salad,1,18.48,2025-11-25
+Margherita Pizza,3,12.2,2025-10-30
+Sushi Roll,1,13.44,2025-11-23
+Cheeseburger,1,10.93,2025-11-15
+Chicken Wings,5,20.51,2025-11-24
+Pasta Alfredo,2,8.25,2025-11-24
+Sushi Roll,3,9.46,2025-11-14
+Chicken Wings,3,11.42,2025-10-28
+Ramen Bowl,1,22.88,2025-11-13
+Tandoori Chicken,3,14.34,2025-10-30
+Tandoori Chicken,3,18.16,2025-11-22
+Sushi Roll,3,6.05,2025-11-16
+Ramen Bowl,4,14.25,2025-11-10
+Veg Biryani,4,16.43,2025-11-02
+Cheeseburger,5,23.09,2025-11-05
+Sushi Roll,3,24.12,2025-11-09
+Tandoori Chicken,2,21.08,2025-11-14
+Caesar Salad,1,7.92,2025-11-09
+Pasta Alfredo,5,23.84,2025-10-26
+Chicken Wings,1,13.08,2025-11-23
+Pasta Alfredo,1,22.59,2025-11-22
+Margherita Pizza,2,14.27,2025-11-09
