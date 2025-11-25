@@ -159,6 +159,25 @@ def extract_dish(text):
 # Utility: LLM Summary Generator (OpenRouter)
 # ----------------------------------------------------------
 def generate_llm_summary(text):
+    # Check if API key is available
+    if not OPENROUTER_API_KEY or OPENROUTER_API_KEY.startswith("sk-or-v1-") == False:
+        return """
+        ⚠️ **Invalid or Missing API Key**
+        
+        Your OpenRouter API key is not configured correctly.
+        
+        **To fix:**
+        1. Go to https://openrouter.ai/account/api-keys
+        2. Create a new API key
+        3. Add to Streamlit Cloud Secrets:
+           - Click "Manage app"
+           - Click "Settings" → "Secrets"
+           - Add: `OPENROUTER_API_KEY=sk-or-v1-your-key-here`
+        4. Wait for app to restart
+        
+        See API_KEY_FIX.md for detailed instructions.
+        """
+    
     try:
         url = "https://openrouter.ai/api/v1/chat/completions"
         headers = {
@@ -178,14 +197,34 @@ def generate_llm_summary(text):
         res = requests.post(url, headers=headers, json=payload, timeout=30)
         
         # Check response status
-        if res.status_code != 200:
-            return f"⚠️ API Error {res.status_code}: {res.text[:100]}"
+        if res.status_code == 401:
+            return """
+            ⚠️ **API Key Invalid (401 Error)**
+            
+            Your OpenRouter API key is not recognized.
+            
+            **Common causes:**
+            - Key is expired or revoked
+            - Key is incorrect or malformed
+            - Key is from wrong account
+            
+            **To fix:**
+            1. Go to https://openrouter.ai/account/api-keys
+            2. Create a NEW API key (don't reuse old ones)
+            3. Update Streamlit Cloud Secrets with the new key
+            4. See API_KEY_FIX.md for full instructions
+            """
+        elif res.status_code != 200:
+            return f"⚠️ API Error {res.status_code}: {res.text[:150]}"
         
         data = res.json()
         
         # Check for API error response
         if "error" in data:
-            return f"⚠️ API Error: {data['error'].get('message', 'Unknown error')}"
+            error_msg = data['error'].get('message', 'Unknown error')
+            if "401" in str(error_msg):
+                return "⚠️ API Key Invalid - See instructions above"
+            return f"⚠️ API Error: {error_msg}"
         
         # Check for choices in response
         if "choices" not in data or not data["choices"]:
