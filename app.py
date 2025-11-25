@@ -10,7 +10,24 @@ import plotly.graph_objects as go
 import numpy as np
 from datetime import datetime, timedelta
 import warnings
+import subprocess
+import sys
 warnings.filterwarnings('ignore')
+
+# ----------------------------------------------------------
+# Auto-download spaCy model on startup (for Streamlit Cloud)
+# ----------------------------------------------------------
+@st.cache_resource
+def ensure_spacy_model():
+    try:
+        spacy.load("en_core_web_sm")
+    except OSError:
+        st.info("📥 Downloading spaCy language model (this runs once)...")
+        subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+        st.success("✅ Model downloaded! Refreshing app...")
+        st.rerun()
+
+ensure_spacy_model()
 
 # Try to import statsmodels, but make it optional
 try:
@@ -90,11 +107,15 @@ EXPLANATIONS = {
 
 
 # ----------------------------------------------------------
-# Load spaCy model
+# Load spaCy model (already ensured above)
 # ----------------------------------------------------------
 @st.cache_resource
 def load_spacy():
-    return spacy.load("en_core_web_sm")
+    try:
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        st.error("❌ spaCy model not found. Please refresh the page.")
+        st.stop()
 
 nlp = load_spacy()
 
