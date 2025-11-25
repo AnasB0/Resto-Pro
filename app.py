@@ -50,9 +50,15 @@ except ImportError:
     ARIMA = None
 
 # ----------------------------------------------------------
-# HARD-CODED API KEY (as you requested)
+# Load API Configuration
 # ----------------------------------------------------------
-OPENROUTER_API_KEY = "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"
+# First try to load from .env file (local development)
+from dotenv import load_dotenv
+load_dotenv()
+
+# Get API key from environment or use hardcoded fallback
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY") or "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"
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL") or "openai/gpt-4o-mini"
 
 # ----------------------------------------------------------
 # Configure Streamlit
@@ -161,20 +167,39 @@ def generate_llm_summary(text):
         }
 
         payload = {
-            "model": "openai/gpt-4o-mini",
+            "model": OPENROUTER_MODEL,
             "messages": [
-                {"role": "system", "content": "You summarize restaurant reviews and extract insights."},
-                {"role": "user", "content": f"Summarize the following reviews:\n\n{text}"}
-            ]
+                {"role": "system", "content": "You are a helpful assistant that summarizes restaurant reviews and extracts key insights."},
+                {"role": "user", "content": f"Summarize the following reviews in 2-3 sentences with key insights:\n\n{text[:2000]}"}
+            ],
+            "max_tokens": 500
         }
 
-        res = requests.post(url, headers=headers, json=payload)
+        res = requests.post(url, headers=headers, json=payload, timeout=30)
+        
+        # Check response status
+        if res.status_code != 200:
+            return f"⚠️ API Error {res.status_code}: {res.text[:100]}"
+        
         data = res.json()
-
+        
+        # Check for API error response
+        if "error" in data:
+            return f"⚠️ API Error: {data['error'].get('message', 'Unknown error')}"
+        
+        # Check for choices in response
+        if "choices" not in data or not data["choices"]:
+            return f"⚠️ Unexpected API response format. No choices returned."
+        
         return data["choices"][0]["message"]["content"]
 
+    except requests.exceptions.Timeout:
+        return "⚠️ API request timed out. Try again in a moment."
+    except requests.exceptions.ConnectionError:
+        return "⚠️ Could not connect to API. Check your internet connection."
     except Exception as e:
-        return f"LLM summary failed: {str(e)}"
+        return f"⚠️ Summary generation failed: {str(e)[:100]}"
+
 
 # ----------------------------------------------------------
 # Utility: Sales Forecasting with ARIMA
