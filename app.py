@@ -22,15 +22,16 @@ def load_spacy():
     try:
         return spacy.load("en_core_web_sm")
     except OSError as e:
-        st.error("""
-        ❌ **spaCy model not found**
+        # Show helpful message and exit gracefully
+        st.warning("""
+        ⏳ **Initializing Language Model**
         
-        The app is installing the language model. Please:
-        1. Refresh the page (Ctrl+R or Cmd+R)
-        2. Wait 2-3 minutes for the first load
-        3. The app will work after the model downloads
+        The spaCy language model is being downloaded (first run only).
+        This may take 2-3 minutes. Please:
+        - Refresh the page in 3 minutes
+        - Or click "Manage app" → "Reboot app" on Streamlit Cloud
         
-        If this doesn't work, go to "Manage app" and restart the app.
+        After the first load, everything will be instant! ✨
         """)
         st.stop()
 
@@ -112,19 +113,6 @@ EXPLANATIONS = {
     "alert": "🚨 Alerts warn you about potential stock issues so you can reorder before running out."
 }
 
-
-# ----------------------------------------------------------
-# Load spaCy model (already ensured above)
-# ----------------------------------------------------------
-@st.cache_resource
-def load_spacy():
-    try:
-        return spacy.load("en_core_web_sm")
-    except OSError:
-        st.error("❌ spaCy model not found. Please refresh the page.")
-        st.stop()
-
-nlp = load_spacy()
 
 # ----------------------------------------------------------
 # Utility: Extract dishes (simple pattern matching)
