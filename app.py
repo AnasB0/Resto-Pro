@@ -15,27 +15,30 @@ import sys
 warnings.filterwarnings('ignore')
 
 # ----------------------------------------------------------
-# Load spaCy model with better error handling
+# Load spaCy model with graceful fallback
 # ----------------------------------------------------------
-@st.cache_resource
-def load_spacy():
-    try:
-        return spacy.load("en_core_web_sm")
-    except OSError as e:
-        # Show helpful message and exit gracefully
-        st.warning("""
-        ⏳ **Initializing Language Model**
-        
-        The spaCy language model is being downloaded (first run only).
-        This may take 2-3 minutes. Please:
-        - Refresh the page in 3 minutes
-        - Or click "Manage app" → "Reboot app" on Streamlit Cloud
-        
-        After the first load, everything will be instant! ✨
-        """)
-        st.stop()
+NLP_AVAILABLE = False
+nlp = None
 
-nlp = load_spacy()
+try:
+    nlp = spacy.load("en_core_web_sm")
+    NLP_AVAILABLE = True
+except OSError:
+    # spaCy model not available - app will work without NLP features
+    NLP_AVAILABLE = False
+    st.warning("""
+    ⚠️ **Language Model Initializing**
+    
+    The spaCy model is downloading in the background. 
+    The app is ready to use, but advanced text analysis may take a moment.
+    
+    **Next steps:**
+    1. Click "Manage app" (bottom right)
+    2. Click "Reboot app"
+    3. Wait 10 minutes for full restart
+    
+    For faster results, you can redeploy from GitHub.
+    """)
 
 # Try to import statsmodels, but make it optional
 try:
@@ -115,7 +118,7 @@ EXPLANATIONS = {
 
 
 # ----------------------------------------------------------
-# Utility: Extract dishes (simple pattern matching)
+# Utility: Extract dishes (works with or without spaCy)
 # ----------------------------------------------------------
 DISH_KEYWORDS = [
     "pizza","burger","pasta","salad","soup","steak","fries","tacos","biryani",
@@ -123,12 +126,27 @@ DISH_KEYWORDS = [
 ]
 
 def extract_dish(text):
-    doc = nlp(text.lower())
-    for np in doc.noun_chunks:
-        for dish in DISH_KEYWORDS:
-            if dish in np.text:
-                return dish
+    """Extract dish name from text using spaCy if available, otherwise keyword matching"""
+    text_lower = text.lower()
+    
+    # First try spaCy if available
+    if NLP_AVAILABLE and nlp is not None:
+        try:
+            doc = nlp(text_lower)
+            for np in doc.noun_chunks:
+                for dish in DISH_KEYWORDS:
+                    if dish in np.text:
+                        return dish
+        except:
+            pass
+    
+    # Fallback to simple keyword matching
+    for dish in DISH_KEYWORDS:
+        if dish in text_lower:
+            return dish
+    
     return "Unknown"
+
 
 # ----------------------------------------------------------
 # Utility: LLM Summary Generator (OpenRouter)
