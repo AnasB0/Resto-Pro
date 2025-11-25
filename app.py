@@ -15,19 +15,26 @@ import sys
 warnings.filterwarnings('ignore')
 
 # ----------------------------------------------------------
-# Auto-download spaCy model on startup (for Streamlit Cloud)
+# Load spaCy model with better error handling
 # ----------------------------------------------------------
 @st.cache_resource
-def ensure_spacy_model():
+def load_spacy():
     try:
-        spacy.load("en_core_web_sm")
-    except OSError:
-        st.info("📥 Downloading spaCy language model (this runs once)...")
-        subprocess.check_call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
-        st.success("✅ Model downloaded! Refreshing app...")
-        st.rerun()
+        return spacy.load("en_core_web_sm")
+    except OSError as e:
+        st.error("""
+        ❌ **spaCy model not found**
+        
+        The app is installing the language model. Please:
+        1. Refresh the page (Ctrl+R or Cmd+R)
+        2. Wait 2-3 minutes for the first load
+        3. The app will work after the model downloads
+        
+        If this doesn't work, go to "Manage app" and restart the app.
+        """)
+        st.stop()
 
-ensure_spacy_model()
+nlp = load_spacy()
 
 # Try to import statsmodels, but make it optional
 try:
