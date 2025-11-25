@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-import spacy
-from textblob import TextBlob
 import os
 from pathlib import Path
 import plotly.express as px
@@ -14,31 +12,34 @@ import subprocess
 import sys
 warnings.filterwarnings('ignore')
 
+# Try to import spaCy, but make it optional
+try:
+    import spacy
+    SPACY_INSTALLED = True
+except ImportError:
+    SPACY_INSTALLED = False
+
+# Try to import TextBlob
+try:
+    from textblob import TextBlob
+    TEXTBLOB_INSTALLED = True
+except ImportError:
+    TEXTBLOB_INSTALLED = False
+
 # ----------------------------------------------------------
 # Load spaCy model with graceful fallback
 # ----------------------------------------------------------
 NLP_AVAILABLE = False
 nlp = None
 
-try:
-    nlp = spacy.load("en_core_web_sm")
-    NLP_AVAILABLE = True
-except OSError:
-    # spaCy model not available - app will work without NLP features
-    NLP_AVAILABLE = False
-    st.warning("""
-    ⚠️ **Language Model Initializing**
-    
-    The spaCy model is downloading in the background. 
-    The app is ready to use, but advanced text analysis may take a moment.
-    
-    **Next steps:**
-    1. Click "Manage app" (bottom right)
-    2. Click "Reboot app"
-    3. Wait 10 minutes for full restart
-    
-    For faster results, you can redeploy from GitHub.
-    """)
+if SPACY_INSTALLED:
+    try:
+        nlp = spacy.load("en_core_web_sm")
+        NLP_AVAILABLE = True
+    except OSError:
+        # Model not downloaded yet, will use keyword fallback
+        NLP_AVAILABLE = False
+
 
 # Try to import statsmodels, but make it optional
 try:
@@ -373,7 +374,24 @@ if not df.empty:
 # ----------------------------------------------------------
 if not df.empty and text_column and text_column in df.columns:
     df["dish"] = df[text_column].apply(extract_dish)
-    df["sentiment"] = df[text_column].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
+    
+    # Sentiment analysis with fallback
+    if TEXTBLOB_INSTALLED:
+        df["sentiment"] = df[text_column].apply(lambda x: TextBlob(str(x)).sentiment.polarity)
+    else:
+        # Simple sentiment fallback without TextBlob
+        def simple_sentiment(text):
+            positive_words = ['good', 'great', 'excellent', 'love', 'amazing', 'delicious', 'perfect', 'wonderful', 'fantastic', 'awesome']
+            negative_words = ['bad', 'terrible', 'hate', 'awful', 'horrible', 'poor', 'worst', 'disgusting', 'nasty']
+            text_lower = str(text).lower()
+            pos_count = sum(text_lower.count(word) for word in positive_words)
+            neg_count = sum(text_lower.count(word) for word in negative_words)
+            if pos_count + neg_count == 0:
+                return 0
+            return (pos_count - neg_count) / (pos_count + neg_count)
+        
+        df["sentiment"] = df[text_column].apply(simple_sentiment)
+    
     df["sentiment_label"] = df["sentiment"].apply(lambda x: "Positive" if x>0.1 else "Negative" if x<-0.1 else "Neutral")
 elif not df.empty:
     # If no suitable text column, create default values
