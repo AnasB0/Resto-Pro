@@ -61,6 +61,36 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY") or "sk-or-v1-15217536409c2d
 OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL") or "openai/gpt-4o-mini"
 
 # ----------------------------------------------------------
+# Google Sheets Integration (Optional)
+# ----------------------------------------------------------
+GOOGLE_SHEETS_ENABLED = False
+try:
+    import gspread
+    GOOGLE_SHEETS_ENABLED = True
+except ImportError:
+    GOOGLE_SHEETS_ENABLED = False
+
+# Get Google Sheets IDs from environment
+REVIEWS_SHEET_ID = os.getenv("GOOGLE_REVIEWS_SHEET_ID", "")
+POS_SHEET_ID = os.getenv("GOOGLE_POS_SHEET_ID", "")
+INVENTORY_SHEET_ID = os.getenv("GOOGLE_INVENTORY_SHEET_ID", "")
+
+@st.cache_data(ttl=300)  # Cache for 5 minutes
+def load_from_google_sheets(sheet_id, sheet_name):
+    """Load data from public Google Sheet"""
+    if not sheet_id or not GOOGLE_SHEETS_ENABLED:
+        return pd.DataFrame()
+    
+    try:
+        # Access public Google Sheet
+        url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/query?tqx=out:csv&sheet={sheet_name}"
+        df = pd.read_csv(url)
+        return df
+    except Exception as e:
+        st.warning(f"⚠️ Could not load from Google Sheets: {str(e)}")
+        return pd.DataFrame()
+
+# ----------------------------------------------------------
 # Configure Streamlit
 # ----------------------------------------------------------
 st.set_page_config(page_title="Restaurant AI Dashboard", layout="wide", initial_sidebar_state="expanded")
@@ -366,59 +396,92 @@ st.title("🍽️ Restaurant AI Dashboard")
 st.markdown("*Real-time insights powered by AI — Local Compute + OpenRouter LLM*")
 
 # ----------------------------------------------------------
-# Load CSV files from data folder
+# Load data from Google Sheets OR CSV files
 # ----------------------------------------------------------
+st.sidebar.markdown("## 📊 Data Source")
+data_source = st.sidebar.radio(
+    "Choose data source:",
+    ["📁 Local CSV Files", "📊 Google Sheets"],
+    help="Switch between local files and live Google Sheets data"
+)
+
 DATA_DIR = Path(__file__).parent / "data"
 
-# Find available CSV files
-available_files = {}
-if DATA_DIR.exists():
-    for csv_file in DATA_DIR.glob("*.csv"):
-        available_files[csv_file.stem] = csv_file
-
-if not available_files:
-    st.error(f"❌ No CSV files found in {DATA_DIR} folder")
-    st.stop()
-
-# ----------------------------------------------------------
 # Initialize data
-# ----------------------------------------------------------
 df = pd.DataFrame()
 df_pos = pd.DataFrame()
 df_inv = pd.DataFrame()
 text_column = None
 
-# Load Reviews
-reviews_file = available_files.get("restaurant_reviews") or available_files.get("reviews") or available_files.get("mapped_reviews_export")
-if reviews_file:
-    try:
-        df = pd.read_csv(reviews_file, on_bad_lines='skip', engine='python')
-    except Exception as e:
-        st.error(f"❌ Error reading reviews file: {e}")
-        st.info("Please check your CSV file format")
-        df = pd.DataFrame()
+if data_source == "📊 Google Sheets":
+    if REVIEWS_SHEET_ID and GOOGLE_SHEETS_ENABLED:
+        st.sidebar.info("✅ Loading from Google Sheets")
+        df = load_from_google_sheets(REVIEWS_SHEET_ID, "restaurant_reviews")
+        df_pos = load_from_google_sheets(POS_SHEET_ID, "pos_sales")
+        df_inv = load_from_google_sheets(INVENTORY_SHEET_ID, "inventory")
+        
+        if df.empty and df_pos.empty and df_inv.empty:
+            st.warning("""
+            ❌ Google Sheets not configured. 
+            
+            To enable Google Sheets integration:
+            1. Create sheets at https://sheets.google.com
+            2. Get your Sheet IDs
+            3. Add to Streamlit Cloud Secrets:
+               - GOOGLE_REVIEWS_SHEET_ID=your_id
+               - GOOGLE_POS_SHEET_ID=your_id
+               - GOOGLE_INVENTORY_SHEET_ID=your_id
+            """)
+    else:
+        st.warning("❌ Google Sheets integration not configured. Using local CSV files instead.")
+        data_source = "📁 Local CSV Files"
 
-# Load POS
-pos_file = available_files.get("pos_sales") or available_files.get("pos")
-if pos_file:
-    try:
-        df_pos = pd.read_csv(pos_file)
-    except Exception as e:
-        st.warning(f"⚠️ Could not load POS data: {e}")
-        df_pos = pd.DataFrame()
+# Fallback to local CSV files
+if data_source == "📁 Local CSV Files":
+    # Find available CSV files
+    available_files = {}
+    if DATA_DIR.exists():
+        for csv_file in DATA_DIR.glob("*.csv"):
+            available_files[csv_file.stem] = csv_file
+    
+    if available_files:
+        st.sidebar.info("✅ Loading from local `/data` folder")
+    
+    # Load Reviews
+    reviews_file = available_files.get("restaurant_reviews") or available_files.get("reviews") or available_files.get("mapped_reviews_export")
+    if reviews_file:
+        try:
+            df = pd.read_csv(reviews_file, on_bad_lines='skip', engine='python')
+        except Exception as e:
+            st.error(f"❌ Error reading reviews file: {e}")
+            df = pd.DataFrame()
+    
+    # Load POS
+    pos_file = available_files.get("pos_sales") or available_files.get("pos")
+    if pos_file:
+        try:
+            df_pos = pd.read_csv(pos_file)
+        except Exception as e:
+            st.warning(f"⚠️ Could not load POS data: {e}")
+            df_pos = pd.DataFrame()
+    
+    # Load Inventory
+    inv_file = available_files.get("inventory")
+    if inv_file:
+        try:
+            df_inv = pd.read_csv(inv_file)
+        except Exception as e:
+            st.warning(f"⚠️ Could not load inventory data: {e}")
+            df_inv = pd.DataFrame()
 
-# Load Inventory
-inv_file = available_files.get("inventory")
-if inv_file:
-    try:
-        df_inv = pd.read_csv(inv_file)
-    except Exception as e:
-        st.warning(f"⚠️ Could not load inventory data: {e}")
-        df_inv = pd.DataFrame()
+if df.empty and df_pos.empty and df_inv.empty:
+    st.error(f"❌ No data found. Configure Google Sheets or add CSV files to `/data` folder")
+    st.stop()
 
+# ----------------------------------------------------------
+# Process data
 # ----------------------------------------------------------
 # Detect text column
-# ----------------------------------------------------------
 if not df.empty:
     possible_names = ['text', 'review_text', 'review', 'content', 'comment', 'message', 'description']
     for col in possible_names:
@@ -434,7 +497,7 @@ if not df.empty:
                 break
 
 # ----------------------------------------------------------
-# Process data (only if we have the text column)
+# Sentiment and Dish Analysis
 # ----------------------------------------------------------
 if not df.empty and text_column and text_column in df.columns:
     df["dish"] = df[text_column].apply(extract_dish)
